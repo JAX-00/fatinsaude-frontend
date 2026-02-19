@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import hospitals from "../data/hospitalData";
+
+import { fetchHospitals } from "../services/hospitalService";
 
 import useUserLocation from "../hooks/useUserLocation";
 import useOnlineStatus from "../hooks/useOnlineStatus";
@@ -14,6 +15,7 @@ import MapLegend from "../components/map/MapLegend";
 import MapFilter from "../components/map/MapFilter";
 import DirectionsLayer from "../components/map/DirectionsLayer";
 import EmergencyConfirm from "../components/modal/EmergencyConfirm";
+import DistrictDetailModal from "../components/district/DistrictDetailModal";
 
 export default function Home() {
   const mapRef = useRef(null);
@@ -25,43 +27,87 @@ export default function Home() {
   const districtState = location.state?.district;
   const focusHospital = location.state?.focusHospital;
 
-  const {
-    center,
-    zoom,
-    setZoom,
-    setIsManualMove,
-  } = useMapCenter({
+  const { center, zoom, setZoom, setIsManualMove } = useMapCenter({
     userLocation,
     districtState,
     focusHospital,
   });
 
+  // ====== State ======
   const [activeType, setActiveType] = useState("ALL");
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
 
+  const [hospitals, setHospitals] = useState([]);
+  const [loadingHospitals, setLoadingHospitals] = useState(false);
+  const [errorHospitals, setErrorHospitals] = useState(null);
+
+  const [routeTarget, setRouteTarget] = useState(null);
   const [showEmergency, setShowEmergency] = useState(false);
   const [pendingCall, setPendingCall] = useState(null);
 
-  const [routeTarget, setRouteTarget] = useState(null);
+  // ====== Callbacks ======
+  const handleSelectHospital = useCallback(
+    (hospital) => {
+      setSelectedHospital(hospital);
+      setZoom(16);
+      setIsManualMove(true);
+    },
+    [setZoom, setIsManualMove]
+  );
+
+  // ====== Effect: focusHospital ======
+  useEffect(() => {
+    if (focusHospital?.hospital) {
+      handleSelectHospital(focusHospital.hospital);
+    }
+  }, [focusHospital, handleSelectHospital]);
+
+  // ====== Effect: fetch hospitals ======
+  useEffect(() => {
+    if (!selectedDistrict) return;
+
+    setLoadingHospitals(true);
+    setErrorHospitals(null);
+
+    fetchHospitals(selectedDistrict.id)
+      .then((data) => setHospitals(data))
+      .catch(() => setErrorHospitals("Dadus la bele simu. Favor koko fali."))
+      .finally(() => setLoadingHospitals(false));
+  }, [selectedDistrict]);
 
   return (
     <MapView mapRef={mapRef} center={center} zoom={zoom}>
+      {/* Filter */}
       <MapFilter value={activeType} onChange={setActiveType} />
 
+      {/* User Location */}
       <UserMarker position={userLocation} />
 
+      {/* Loading & Error */}
+      {loadingHospitals && (
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded shadow z-50">
+          Loading hospital...
+        </div>
+      )}
+
+      {errorHospitals && (
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 bg-red-100 text-red-700 px-4 py-2 rounded shadow z-50">
+          {errorHospitals}
+        </div>
+      )}
+
+      {/* Hospital Markers */}
       <HospitalMarkers
         hospitals={hospitals}
         activeType={activeType}
-        onSelect={(hospital) => {
-          setSelectedHospital(hospital);
-          setZoom(16);
-          setIsManualMove(true);
-        }}
+        onSelect={handleSelectHospital}
       />
 
+      {/* Map Legend */}
       <MapLegend />
 
+      {/* Directions */}
       <DirectionsLayer
         mapRef={mapRef}
         userLocation={userLocation}
@@ -69,17 +115,18 @@ export default function Home() {
         onClear={() => setRouteTarget(null)}
       />
 
+      {/* Hospital Info */}
       <HospitalInfo
         hospital={selectedHospital}
         onClose={() => setSelectedHospital(null)}
         onRoute={(hospital) => setRouteTarget(hospital)}
-        
         onEmergency={(phone) => {
           setPendingCall(phone);
           setShowEmergency(true);
         }}
       />
 
+      {/* Emergency Modal */}
       <EmergencyConfirm
         isOpen={showEmergency}
         phoneNumber={pendingCall}
@@ -88,6 +135,14 @@ export default function Home() {
           setShowEmergency(false);
           setPendingCall(null);
         }}
+      />
+
+      {/* District Detail Modal */}
+      <DistrictDetailModal
+        district={selectedDistrict}
+        onClose={() => setSelectedDistrict(null)}
+        onSelectHospital={handleSelectHospital}
+        onSelectDistrict={(district) => setSelectedDistrict(district)}
       />
     </MapView>
   );

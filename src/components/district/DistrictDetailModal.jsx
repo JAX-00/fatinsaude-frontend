@@ -35,7 +35,11 @@ export default function DistrictDetailModal({
               {list.map((h, i) => (
                 <li
                   key={i}
-                  onClick={() => onSelectHospital(h)}
+                  onClick={() => {
+    onSelectHospital(h); 
+    onClose();           
+  }}
+                  
                   className="border rounded-lg p-3 cursor-pointer hover:bg-red-50"
                 >
                   {h.name}

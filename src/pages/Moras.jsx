@@ -7,6 +7,7 @@ import { filterHospitals } from "../utils/morasHelpers";
 
 import Filtermoras from "../components/filtermoras/Filtermoras";
 import HospitalCard from "../components/filtermoras/HospitalCard";
+import PageHeader from "../components/ui/PageHeader";
 
 export default function Moras() {
   const navigate = useNavigate();
@@ -22,9 +23,8 @@ export default function Moras() {
 
   return (
     <div className="p-4 max-w-7xl mx-auto">
-      <h3 className="text-2xl font-bold text-center mt-6 mb-3">
-        Fasilidade Saude ne’ebe bele Atende Kazu ka Moras
-      </h3>
+     <PageHeader title="Fasilidade Saude ne’ebe bele Atende Kazu ka Moras" description="Página ne’e ajuda Buka kazu ka moras ne’ebé ita hasoru, no hetan
+        ospital, klinik ka apotek ne’ebé bele atende ita-nia moras ne’e."/>
 
       <Filtermoras
         districts={DISTRICTS}
