@@ -11,15 +11,13 @@ export default function HospitalInfo({
   return (
     <InfoWindow
       key={hospital.id || hospital.name}
-      position={hospital.position}
+      position={{
+        lat: hospital.latitude,
+        lng: hospital.longitude,
+      }}
       onCloseClick={onClose}
     >
-      <div
-        className="
-          bg-white rounded-lg shadow-lg border overflow-hidden
-          w-fit max-w-[90vw] sm:max-w-[360px]
-        "
-      >
+      <div className="bg-white rounded-lg shadow-lg border overflow-hidden w-fit max-w-[90vw] sm:max-w-[360px]">
         {/* IMAGE */}
         <img
           src={hospital.image}
@@ -33,18 +31,14 @@ export default function HospitalInfo({
           </h3>
 
           <p><b>⏰ Operasaun:</b> {hospital.operationalTime}</p>
-          <p><b>📍 Distritu:</b> {hospital.district}</p>
+          <p><b>📍 Distritu:</b> {hospital.district?.name}</p>
           <p><b>☎️ Kontaktu:</b> {hospital.phone}</p>
 
           {/* ACTIONS */}
           <div className="flex gap-2 mt-2">
             <a
               href={`tel:${hospital.phone}`}
-              className="
-                flex-1 text-center
-                bg-blue-600 text-white py-2 rounded
-                text-xs sm:text-sm
-              "
+              className="flex-1 text-center bg-blue-600 text-white py-2 rounded text-xs sm:text-sm"
             >
               📞 Call
             </a>
@@ -52,23 +46,25 @@ export default function HospitalInfo({
             {hospital.emergency === "Yes" && hospital.ambulance && (
               <button
                 onClick={() => onEmergency(hospital.ambulance)}
-                className="
-                  flex-1 bg-red-600 text-white py-2 rounded
-                  text-xs sm:text-sm
-                "
+                className="flex-1 bg-red-600 text-white py-2 rounded text-xs sm:text-sm"
               >
                 🚑 Ambulans
               </button>
             )}
           </div>
 
+          {/* ROUTE BUTTON */}
           <button
-            onClick={() => onRoute(hospital)}
-            className="
-              mt-2 w-full
-              bg-green-600 text-white py-2 rounded
-              text-xs sm:text-sm
-            "
+            onClick={() =>
+              onRoute({
+                ...hospital,
+                position: {
+                  lat: hospital.latitude,
+                  lng: hospital.longitude,
+                },
+              })
+            }
+            className="mt-2 w-full bg-green-600 text-white py-2 rounded text-xs sm:text-sm"
           >
             ➡️ Ba iha neba
           </button>

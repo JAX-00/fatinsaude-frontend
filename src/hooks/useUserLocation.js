@@ -2,23 +2,27 @@ import { useEffect, useState } from "react";
 
 export default function useUserLocation() {
   const [location, setLocation] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | loading | granted | denied
 
   useEffect(() => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      setStatus("denied");
+      return;
+    }
 
-    const watchId = navigator.geolocation.watchPosition(
+    setStatus("loading");
+    navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
+        setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setStatus("granted");
       },
-      (err) => console.warn("GPS error:", err),
-      { enableHighAccuracy: true },
+      (err) => {
+        console.warn("GPS error:", err);
+        setStatus("denied");
+      },
+      { enableHighAccuracy: true }
     );
-
-    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
-  return location;
+  return { location, status };
 }

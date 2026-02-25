@@ -16,12 +16,23 @@ import MapFilter from "../components/map/MapFilter";
 import DirectionsLayer from "../components/map/DirectionsLayer";
 import EmergencyConfirm from "../components/modal/EmergencyConfirm";
 import DistrictDetailModal from "../components/district/DistrictDetailModal";
+import LocationStatus from "../components/map/LocationStatus";
 
 export default function Home() {
   const mapRef = useRef(null);
   const location = useLocation();
 
-  const userLocation = useUserLocation();
+  const { location: userLocation, status: locationStatus } = useUserLocation();
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  // Saat user klik Directions
+const handleRouteClick = (hospital) => {
+  if (!userLocation) {
+    setShowLocationModal(true); // munculkan modal warning
+    return;
+  }
+  setRouteTarget(hospital);
+};
+
   const isOnline = useOnlineStatus();
 
   const districtState = location.state?.district;
@@ -57,24 +68,44 @@ export default function Home() {
   );
 
   // ====== Effect: focusHospital ======
-  useEffect(() => {
-    if (focusHospital?.hospital) {
-      handleSelectHospital(focusHospital.hospital);
-    }
-  }, [focusHospital, handleSelectHospital]);
+  // useEffect(() => {
+  //   if (focusHospital?.hospital) {
+  //     handleSelectHospital(focusHospital.hospital);
+  //   }
+  // }, [focusHospital, handleSelectHospital]);
 
   // ====== Effect: fetch hospitals ======
+useEffect(() => {
+  // Hapus atau komentari baris ini:
+  // if (!selectedDistrict) return; 
+
+  setLoadingHospitals(true);
+  setErrorHospitals(null);
+
+  // Jika selectedDistrict null, kirim undefined atau handle di service
+  fetchHospitals(selectedDistrict?.id) 
+    .then((data) => {
+      console.log("Data berhasil masuk:", data);
+      setHospitals(data);
+    })
+    .catch((err) => {
+      console.error("Fetch Error:", err);
+      setErrorHospitals("Dadus la bele simu. Favor koko fali.");
+    })
+    .finally(() => setLoadingHospitals(false));
+}, [selectedDistrict]);
+
   useEffect(() => {
-    if (!selectedDistrict) return;
+  console.log("Hospitals:", hospitals);
+}, [hospitals]);
 
-    setLoadingHospitals(true);
-    setErrorHospitals(null);
+useEffect(() => {
+  console.log("Selected hospital:", selectedHospital);
+}, [selectedHospital]);
 
-    fetchHospitals(selectedDistrict.id)
-      .then((data) => setHospitals(data))
-      .catch(() => setErrorHospitals("Dadus la bele simu. Favor koko fali."))
-      .finally(() => setLoadingHospitals(false));
-  }, [selectedDistrict]);
+useEffect(() => {
+  setSelectedHospital(null);
+}, [activeType]);
 
   return (
     <MapView mapRef={mapRef} center={center} zoom={zoom}>
@@ -83,6 +114,15 @@ export default function Home() {
 
       {/* User Location */}
       <UserMarker position={userLocation} />
+
+<LocationStatus
+  status={locationStatus}
+  showModal={showLocationModal}
+  onRetry={() => {
+    setShowLocationModal(false);
+    window.location.reload();
+  }}
+/>
 
       {/* Loading & Error */}
       {loadingHospitals && (
@@ -116,15 +156,15 @@ export default function Home() {
       />
 
       {/* Hospital Info */}
-      <HospitalInfo
-        hospital={selectedHospital}
-        onClose={() => setSelectedHospital(null)}
-        onRoute={(hospital) => setRouteTarget(hospital)}
-        onEmergency={(phone) => {
-          setPendingCall(phone);
-          setShowEmergency(true);
-        }}
-      />
+<HospitalInfo
+  hospital={selectedHospital}
+  onClose={() => setSelectedHospital(null)}
+  onRoute={handleRouteClick}  // <- ini ganti dari setRouteTarget langsung
+  onEmergency={(phone) => {
+    setPendingCall(phone);
+    setShowEmergency(true);
+  }}
+/>
 
       {/* Emergency Modal */}
       <EmergencyConfirm

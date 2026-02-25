@@ -10,7 +10,11 @@ export default function DirectionsLayer({
   const [directions, setDirections] = useState(null);
 
   useEffect(() => {
-    if (!destination || !userLocation) return;
+    // Pastikan userLocation dan destination.position ada
+    if (!destination?.position || !userLocation) {
+      setDirections(null);
+      return;
+    }
 
     const service = new window.google.maps.DirectionsService();
 
@@ -24,18 +28,16 @@ export default function DirectionsLayer({
         if (status === "OK") {
           setDirections(result);
 
+          // Fit map ke rute
           if (mapRef?.current) {
-            const bounds =
-              new window.google.maps.LatLngBounds();
-            result.routes[0].overview_path.forEach((p) =>
-              bounds.extend(p),
-            );
+            const bounds = new window.google.maps.LatLngBounds();
+            result.routes[0].overview_path.forEach((p) => bounds.extend(p));
             mapRef.current.fitBounds(bounds);
           }
         } else {
           console.error("Directions error:", status);
         }
-      },
+      }
     );
   }, [destination, userLocation, mapRef]);
 
@@ -47,10 +49,7 @@ export default function DirectionsLayer({
         directions={directions}
         options={{
           suppressMarkers: true,
-          polylineOptions: {
-            strokeColor: "#2563eb",
-            strokeWeight: 5,
-          },
+          polylineOptions: { strokeColor: "#2563eb", strokeWeight: 5 },
         }}
       />
 
@@ -59,7 +58,7 @@ export default function DirectionsLayer({
           setDirections(null);
           onClear?.();
         }}
-        className="absolute top-4 right-4 z-10 bg-white px-4 py-2 rounded-lg shadow"
+        className="absolute top-4 right-4 z-50 bg-white px-4 py-2 rounded-lg shadow hover:bg-gray-100 transition"
       >
         ❌ Hapus Rute
       </button>
