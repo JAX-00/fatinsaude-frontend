@@ -8,16 +8,20 @@ export const fetchDistricts = () =>
 export const fetchDistrictById = (id) =>
   axiosClient.get(`/api/v1/districts/${id}`).then(res => res.data);
 
-// create district 
-export const createDistrict = (data) =>
-  axiosClient.post("/api/v1/districts", data).then(res => res.data);
-
-
-// update district
-export const updateDistrict = (id, data) =>
-  axiosClient.put(`/api/v1/districts/${id}`, data).then(res => res.data);
-
 // delete district 
 export const deleteDistrict = (id) =>
   axiosClient.delete(`/api/v1/districts/${id}`).then(res => res.data);
 
+export const createDistrict = (data) =>
+  axiosClient.post("/api/v1/districts", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }).then(res => res.data);
+
+export const updateDistrict = (id, data) =>
+  axiosClient.put(`/api/v1/districts/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }).then(res => res.data);

@@ -4,6 +4,8 @@ export default function DistrictCard({
   onClick,
   onDetail,
 }) {
+   const BASE_URL = process.env.REACT_APP_API_URL.replace("/api/v1", "");
+
   return (
     <div
       onClick={onClick}
@@ -12,7 +14,7 @@ export default function DistrictCard({
               text-white"
     >
       <img
-        src={district.image}
+        src={district.image ? `${BASE_URL}${district.image}` : "/no-image.png"}
         alt={district.name}
         className="w-full h-44 object-cover"
       />
@@ -26,7 +28,7 @@ export default function DistrictCard({
           <p>🏥 Centro: {stats.Centro || 0}</p>
           <p>🩺 Clinic: {stats.Clinic || 0}</p>
           <p className="font-semibold pt-1">
-            Total: {district.hospitals.length}
+            Total: {district.hospitals?.length || 0}
           </p>
         </div>
 

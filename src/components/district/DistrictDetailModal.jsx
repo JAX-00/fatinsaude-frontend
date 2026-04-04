@@ -5,14 +5,14 @@ export default function DistrictDetailModal({
 }) {
   if (!district) return null;
 
-  const groupByType = (list) =>
+  const groupByType = (list = []) =>
     list.reduce((acc, h) => {
       if (!acc[h.type]) acc[h.type] = [];
       acc[h.type].push(h);
       return acc;
     }, {});
 
-  const grouped = groupByType(district.hospitals);
+  const grouped = groupByType(district.hospitals || []);
 
   return (
     <div
@@ -24,6 +24,10 @@ export default function DistrictDetailModal({
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-xl font-bold mb-4">{district.name}</h3>
+
+        {district.hospitals?.length === 0 && (
+          <p className="text-gray-500 text-sm mb-4">No hospitals in this district.</p>
+        )}
 
         {Object.entries(grouped).map(([type, list]) => (
           <div key={type} className="mb-4">

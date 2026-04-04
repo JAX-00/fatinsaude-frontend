@@ -7,12 +7,14 @@ import InformasaunGeral from "./pages/InformasaunGeral";
 import FilterMoras from "./pages/Moras";
 import { LoadScript } from "@react-google-maps/api";
 import DistrictPage from "./pages/DistrictPage";
+import { Toaster } from "react-hot-toast";
 
 const GOOGLE_API_KEY = "AIzaSyCj8ylxwCRQFiMCDb1i-WQ1TWG8CloZ2Eg";
 
 function App() {
   return (
     <LoadScript googleMapsApiKey={GOOGLE_API_KEY}>
+      <Toaster position="top-right" />
       <Router>
         <div className="flex flex-col min-h-screen font-poppins">
           <Header />
