@@ -6,8 +6,10 @@ import Distritu from "./pages/Distritu";
 import InformasaunGeral from "./pages/InformasaunGeral";
 import FilterMoras from "./pages/Moras";
 import { LoadScript } from "@react-google-maps/api";
-import DistrictPage from "./pages/DistrictPage";
+import DistrictForm from "./pages/DistrictForm";
 import { Toaster } from "react-hot-toast";
+import DistrictList from "./pages/DistrictList";
+
 
 const GOOGLE_API_KEY = "AIzaSyCj8ylxwCRQFiMCDb1i-WQ1TWG8CloZ2Eg";
 
@@ -24,7 +26,9 @@ function App() {
               <Route path="/distritu" element={<Distritu />} />
               <Route path="/informasaun" element={<InformasaunGeral />} />
               <Route path="/filtermoras" element={<FilterMoras />} />
-              <Route path="/districts" element={<DistrictPage />} />
+              <Route path="/districts" element={<DistrictList />} />
+              <Route path="/district/create" element={<DistrictForm />} />
+              <Route path="/district/edit/:id" element={<DistrictForm />} />
             </Routes>
           </main>
           <Footer />
