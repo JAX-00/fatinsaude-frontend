@@ -23,7 +23,8 @@ export default function Distritu() {
   if (error) return <ErrorState />;
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
+    <div className="h-full overflow-y-auto bg-slate-50/50">
+      <div className="p-8 max-w-7xl mx-auto space-y-8">
 
       <PageHeader
         title="Fasilidade Saude Iha Distritu Timor-Leste"
@@ -50,6 +51,11 @@ export default function Distritu() {
             />
           );
         })}
+        {districts.length === 0 && (
+          <div className="col-span-full py-20 text-center text-slate-400">
+            <p className="text-lg font-bold">Dadus distritu la iha</p>
+          </div>
+        )}
       </div>
 
       <DistrictDetailModal
@@ -66,6 +72,7 @@ export default function Distritu() {
           });
         }}
       />
+      </div>
     </div>
   );
 }

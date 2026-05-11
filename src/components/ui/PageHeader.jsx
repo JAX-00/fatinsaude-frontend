@@ -1,20 +1,28 @@
+import { motion } from "framer-motion";
+
 export default function PageHeader({ title, description }) {
   return (
-    <div className="mb-6">
-      <h3 className="
-        text-2xl font-bold text-center
-        mt-6 mb-3 relative
-        after:block after:w-80 after:h-1
-        after:bg-[#087BA7]
-        after:mx-auto after:mt-2
-      ">
-        {title}
-      </h3>
+    <div className="text-center space-y-4 py-6">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-2"
+      >
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          {title}
+        </h1>
+        <div className="w-24 h-1.5 bg-emerald-500 mx-auto rounded-full shadow-sm shadow-emerald-500/20" />
+      </motion.div>
 
       {description && (
-        <p className="text-center">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-slate-500 max-w-2xl mx-auto text-sm sm:text-base font-medium leading-relaxed"
+        >
           {description}
-        </p>
+        </motion.p>
       )}
     </div>
   );

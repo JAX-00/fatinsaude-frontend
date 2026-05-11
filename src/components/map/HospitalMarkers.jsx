@@ -22,6 +22,8 @@ export default function HospitalMarkers({ hospitals, activeType, onSelect }) {
           // 3. Pastikan latitude & longitude ada sebelum render marker
           if (!hospital.latitude || !hospital.longitude) return null;
 
+          const iconData = getHospitalIcon(hospital.type);
+          
           return (
             <Marker
               key={hospital.id}
@@ -29,16 +31,17 @@ export default function HospitalMarkers({ hospitals, activeType, onSelect }) {
                 lat: Number(hospital.latitude), 
                 lng: Number(hospital.longitude) 
               }}
-              // 4. Cegah error jika window.google belum dimuat
               icon={
                 window.google
                   ? {
-                      ...getHospitalIcon(hospital.type),
+                      url: iconData.url,
                       scaledSize: new window.google.maps.Size(40, 40),
+                      anchor: iconData.anchor ? new window.google.maps.Size(iconData.anchor[0], iconData.anchor[1]) : undefined,
                     }
                   : undefined
               }
               onClick={() => onSelect(hospital)}
+              animation={window.google?.maps.Animation.DROP}
             />
           );
         })}

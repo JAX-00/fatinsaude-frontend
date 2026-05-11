@@ -20,18 +20,25 @@ export default function useMapCenter({
 
   // From district page
   useEffect(() => {
-    if (districtState && !focusHospital) {
-      setCenter(districtState.hospitals[0].position);
-      setZoom(13);
+    if (districtState) {
+      if (districtState.latitude && districtState.longitude) {
+        setCenter({ lat: Number(districtState.latitude), lng: Number(districtState.longitude) });
+        setZoom(11.3);
+      } else if (districtState.hospitals && districtState.hospitals.length > 0) {
+        const h = districtState.hospitals[0];
+        setCenter({ lat: Number(h.latitude), lng: Number(h.longitude) });
+        setZoom(11.3);
+      }
       setIsManualMove(true);
     }
-  }, [districtState, focusHospital]);
+  }, [districtState]);
 
   // Focus specific hospital
   useEffect(() => {
-    if (focusHospital) {
-      setCenter(focusHospital.position);
-      setZoom(focusHospital.zoom || 16);
+    if (focusHospital?.hospital) {
+      const h = focusHospital.hospital;
+      setCenter({ lat: Number(h.latitude), lng: Number(h.longitude) });
+      setZoom(16);
       setIsManualMove(true);
     }
   }, [focusHospital]);

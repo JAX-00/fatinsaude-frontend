@@ -1,16 +1,27 @@
 // src/utils/markerIcons.js
 
 export const userIcon = {
-  url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+  url: "http://maps.google.com/mapfiles/kml/pal2/icon10.png",
 };
 
 export function getHospitalIcon(type) {
-  // convert type ke lowercase agar case-insensitive
   const icons = {
-    hospital: { url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png" },
-    clinic: { url: "https://maps.google.com/mapfiles/ms/icons/green-dot.png" },
-    centro: { url: "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png" },
-    apotik: { url: "https://maps.google.com/mapfiles/ms/icons/purple-dot.png" },
+    hospital: { 
+      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_redH.png",
+      anchor: [20, 40]
+    },
+    clinic: { 
+      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_greenC.png",
+      anchor: [20, 40]
+    },
+    centro: { 
+      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_yellowC.png",
+      anchor: [20, 40]
+    },
+    apotik: { 
+      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_purpleP.png",
+      anchor: [20, 40]
+    },
   };
 
   if (!type) return icons.hospital;
