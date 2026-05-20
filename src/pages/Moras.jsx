@@ -143,6 +143,17 @@ export default function Moras() {
                     <p className="text-lg font-bold">Dadus hospital la iha</p>
                     <p className="text-sm">Koko fali ho filter seluk.</p>
                   </div>
+                  {(selectedDisease || selectedDistrictId) && (
+                    <button 
+                      onClick={() => {
+                        setSelectedDisease("");
+                        setSelectedDistrictId("");
+                      }}
+                      className="mt-4 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-xl font-bold text-sm hover:bg-emerald-200 transition-colors"
+                    >
+                      Hamoos Filter
+                    </button>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

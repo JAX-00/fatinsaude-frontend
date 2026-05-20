@@ -3,11 +3,13 @@ import PageHeader from "../components/ui/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Play, Info, Heart, ChevronRight, Share2, Loader2, SearchX } from "lucide-react";
 import { fetchEducation } from "../services/educationService";
+import EducationDetailModal from "../components/education/EducationDetailModal";
 
 export default function InformasaunGeral() {
   const [activeTab, setActiveTab] = useState("Hotu");
   const [educationData, setEducationData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedEducation, setSelectedEducation] = useState(null);
   
   const categories = ["Hotu", "Atendimentu Primeiru", "CPR", "Prevensaun"];
   const BASE_URL = "http://localhost:4000";
@@ -71,7 +73,13 @@ export default function InformasaunGeral() {
               <p className="text-emerald-100 text-lg">
                 Ita mós bele salva moris. Aprende teknika báziku CPR hodi prepara an ba emerjénsia.
               </p>
-              <button className="bg-white text-emerald-900 px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-emerald-50 transition-all w-fit group">
+              <button 
+                onClick={() => {
+                  const cprItem = educationData.find(d => d.category === "CPR" || d.title.toLowerCase().includes("cpr"));
+                  if (cprItem) setSelectedEducation(cprItem);
+                }}
+                className="bg-white text-emerald-900 px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-emerald-50 transition-all w-fit group"
+              >
                 <Play size={18} className="fill-emerald-900" />
                 Haree Video Tutorial
               </button>
@@ -121,7 +129,10 @@ export default function InformasaunGeral() {
                     </p>
                     <div className="pt-4 mt-auto flex items-center justify-between border-t border-slate-50">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.time}</span>
-                      <button className="text-emerald-600 font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+                      <button 
+                        onClick={() => setSelectedEducation(item)}
+                        className="text-emerald-600 font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all"
+                      >
                         Lee fali
                         <ChevronRight size={16} />
                       </button>
@@ -138,6 +149,15 @@ export default function InformasaunGeral() {
           </AnimatePresence>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedEducation && (
+          <EducationDetailModal 
+            item={selectedEducation} 
+            onClose={() => setSelectedEducation(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

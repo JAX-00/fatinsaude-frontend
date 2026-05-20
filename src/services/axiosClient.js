@@ -28,6 +28,18 @@ axiosClient.interceptors.response.use(
       console.error("Server tidak aktif / Network error");
     } else {
       console.error("Error:", error.response.data);
+      
+      // Handle Token Expiration globally
+      if (error.response.status === 401) {
+        console.warn("Sesi kadaluarsa. Silakan login kembali.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        
+        // Redirect to login if not already there
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
+      }
     }
 
     return Promise.reject(error);

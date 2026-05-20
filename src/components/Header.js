@@ -82,6 +82,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
+            aria-label={menuOpen ? "Taka Menu" : "Loke Menu"}
             className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-all"
             onClick={() => setMenuOpen(!menuOpen)}
           >

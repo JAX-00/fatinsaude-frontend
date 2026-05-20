@@ -7,20 +7,16 @@ export const userIcon = {
 export function getHospitalIcon(type) {
   const icons = {
     hospital: { 
-      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_redH.png",
-      anchor: [20, 40]
+      url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
     },
     clinic: { 
-      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_greenC.png",
-      anchor: [20, 40]
+      url: "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
     },
     centro: { 
-      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_yellowC.png",
-      anchor: [20, 40]
+      url: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
     },
     apotik: { 
-      url: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_purpleP.png",
-      anchor: [20, 40]
+      url: "https://maps.google.com/mapfiles/ms/icons/purple-dot.png",
     },
   };
 

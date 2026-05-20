@@ -23,8 +23,13 @@ export default function HospitalCard({ hospital, onClick }) {
               <Activity size={48} />
             </div>
           )}
-          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-xl text-[10px] font-bold text-emerald-700 uppercase">
-            {hospital.type || "Fasilidade"}
+          <div className="absolute top-4 right-4 flex gap-2">
+            <div className="bg-slate-900/90 backdrop-blur-md px-3 py-1 rounded-xl text-[10px] font-bold text-white uppercase shadow-sm">
+              {hospital.ownership || "GOVERNO"}
+            </div>
+            <div className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-xl text-[10px] font-bold text-emerald-700 uppercase shadow-sm">
+              {hospital.type || "Fasilidade"}
+            </div>
           </div>
         </div>
 

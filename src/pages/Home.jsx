@@ -95,7 +95,7 @@ export default function Home() {
                 <List size={20} />
                 Lista Fasilidade
               </h2>
-              <button onClick={() => setShowSidePanel(false)} className="hover:bg-white/20 p-1 rounded-lg transition-all">
+              <button aria-label="Taka Pannel" onClick={() => setShowSidePanel(false)} className="hover:bg-white/20 p-1 rounded-lg transition-all">
                 <X size={24} />
               </button>
             </div>
@@ -137,6 +137,14 @@ export default function Home() {
                     <p className="text-lg font-bold">Dadus hospital la iha</p>
                     <p className="text-sm">Koko fali ho filter seluk.</p>
                   </div>
+                  {searchQuery && (
+                    <button 
+                      onClick={() => setSearchQuery("")}
+                      className="mt-4 px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors"
+                    >
+                      Hamoos Pencarian
+                    </button>
+                  )}
                 </motion.div>
               )}
             </div>
@@ -189,7 +197,7 @@ export default function Home() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             onClick={() => setShowSidePanel(true)}
-            className="absolute bottom-10 left-6 z-20 bg-emerald-600 text-white p-4 rounded-full shadow-2xl hover:bg-emerald-700 transition-all flex items-center gap-2 font-bold"
+            className="absolute bottom-24 lg:bottom-10 left-6 z-20 bg-emerald-600 text-white p-4 rounded-full shadow-2xl hover:bg-emerald-700 transition-all flex items-center gap-2 font-bold"
           >
             <List size={24} />
             <span className="hidden sm:inline">Hatudu Lista</span>
@@ -197,7 +205,7 @@ export default function Home() {
         )}
 
         {/* Map Legend (Bottom Right) */}
-        <div className="absolute bottom-10 right-6 z-20">
+        <div className="absolute bottom-24 lg:bottom-10 right-6 z-20">
           <MapLegend />
         </div>
       </div>

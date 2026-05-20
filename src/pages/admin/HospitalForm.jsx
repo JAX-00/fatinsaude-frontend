@@ -30,6 +30,7 @@ export default function HospitalForm() {
     emergency: "Yes",
     operationTime: "24 hours",
     diseases: "",
+    ownership: "GOVERNO",
   });
   const [imageFile, setImageFile] = useState(null);
 
@@ -49,6 +50,7 @@ export default function HospitalForm() {
           emergency: data.emergency ? "Yes" : "No",
           operationTime: data.operationTime || "24 hours",
           diseases: Array.isArray(data.diseases) ? data.diseases.join(", ") : "",
+          ownership: data.ownership || "GOVERNO",
         });
         if (data.image) setPreview(`http://localhost:4000${data.image}`);
         setLoading(false);
@@ -152,6 +154,15 @@ export default function HospitalForm() {
                 <select name="emergency" value={formData.emergency} onChange={handleChange} className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 font-medium">
                   <option value="Yes">Sim (Ya)</option>
                   <option value="No">Lae (Tidak)</option>
+                </select>
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-bold text-slate-700">Nain / Kepemilikan <span className="text-red-500">*</span></label>
+                <select name="ownership" value={formData.ownership} onChange={handleChange} required className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 font-medium">
+                  <option value="GOVERNO">Governo (Pemerintah)</option>
+                  <option value="PRIVADU">Privadu (Swasta)</option>
+                  <option value="ONG">ONG / NGO (Organisasi Non-Profit)</option>
+                  <option value="OTHER">Seluk (Lainnya)</option>
                 </select>
               </div>
             </div>

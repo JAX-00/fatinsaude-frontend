@@ -45,6 +45,7 @@ export default function DistrictDetailModal({
             <p className="text-emerald-100 text-xs font-medium uppercase tracking-widest mt-1">Lista Fasilidade Saude</p>
           </div>
           <button
+            aria-label="Taka Modal"
             onClick={onClose}
             className="p-2 hover:bg-white/20 rounded-xl transition-all"
           >

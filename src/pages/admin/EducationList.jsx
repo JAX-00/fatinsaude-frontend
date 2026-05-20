@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchEducation, deleteEducation } from "../../services/educationService";
-import { Plus, Search, BookOpen, Trash2, Edit2, Loader2, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Search, BookOpen, Trash2, Edit2, Loader2, Play, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfirmModal from "../../components/ui/ConfirmModal";
+import EducationDetailModal from "../../components/education/EducationDetailModal";
 import { clsx } from "clsx";
 
 export default function EducationList() {
@@ -13,6 +14,7 @@ export default function EducationList() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [selectedEducation, setSelectedEducation] = useState(null);
   const ITEMS_PER_PAGE = 5;
 
   const loadData = async () => {
@@ -118,9 +120,17 @@ export default function EducationList() {
                     <Link 
                       to={`/admin/education/edit/${item.id}`}
                       className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
+                      title="Edit"
                     >
                       <Edit2 size={14} />
                     </Link>
+                    <button 
+                      onClick={() => setSelectedEducation(item)}
+                      className="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-600 hover:text-white transition-all"
+                      title="Detail"
+                    >
+                      <Eye size={14} />
+                    </button>
                     <button 
                       onClick={() => setConfirmDelete(item.id)}
                       className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all"
@@ -129,9 +139,13 @@ export default function EducationList() {
                     </button>
                   </div>
                   {item.videoUrl && (
-                    <div className="text-emerald-500">
+                    <button 
+                      onClick={() => setSelectedEducation(item)}
+                      className="text-emerald-500 hover:scale-110 transition-transform p-1"
+                      title="Haree Video"
+                    >
                       <Play size={16} fill="currentColor" />
-                    </div>
+                    </button>
                   )}
                 </div>
               </div>
@@ -187,6 +201,15 @@ export default function EducationList() {
         onConfirm={handleDelete}
         onCancel={() => setConfirmDelete(null)}
       />
+
+      <AnimatePresence>
+        {selectedEducation && (
+          <EducationDetailModal 
+            item={selectedEducation} 
+            onClose={() => setSelectedEducation(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

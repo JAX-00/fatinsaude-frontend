@@ -34,8 +34,13 @@ export default function HospitalInfo({
               e.target.src = "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=400";
             }}
           />
-          <div className="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-lg text-[10px] font-bold text-emerald-700 uppercase tracking-wider shadow-sm">
-            {hospital.type}
+          <div className="absolute top-2 right-2 flex gap-1.5">
+            <div className="px-2 py-1 bg-slate-900/90 backdrop-blur-sm rounded-lg text-[10px] font-bold text-white uppercase tracking-wider shadow-sm">
+              {hospital.ownership || "GOVERNO"}
+            </div>
+            <div className="px-2 py-1 bg-white/90 backdrop-blur-sm rounded-lg text-[10px] font-bold text-emerald-700 uppercase tracking-wider shadow-sm">
+              {hospital.type}
+            </div>
           </div>
         </div>
 
